@@ -45,6 +45,7 @@ class ViewController: UIViewController, CalcInteractor {
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         self.calculator.makeOperation()
     }
-
+ 
+    
 }
 
