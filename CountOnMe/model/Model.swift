@@ -13,7 +13,6 @@ class CalcModel {
         }
     }
     
-    
     init(interactor: CalcInteractor) {
         self.interactor = interactor
         self.text = ""
@@ -25,7 +24,8 @@ class CalcModel {
     
     // Error check computed variables
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" &&
+               elements.last != "x" && elements.last != "÷"
     }
     
     var expressionHaveEnoughElement: Bool {
@@ -33,7 +33,8 @@ class CalcModel {
     }
     
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" &&
+               elements.last != "x" && elements.last != "÷"
     }
     
     var expressionHaveResult: Bool {
@@ -43,10 +44,8 @@ class CalcModel {
     func tapped(number: String) {
         if expressionHaveResult {
             self.text = ""
-    
         }
         self.text.append(number)
-        
     }
     
     func tappedOpe(operand: String) {
@@ -80,6 +79,13 @@ class CalcModel {
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
+            case "x": result = left * right
+            case "÷":
+                guard right != 0 else {
+                    self.interactor.onError(message: "Division par zéro !")
+                    return
+                }
+                result = left / right
             default: fatalError("Unknown operator !")
             }
             
@@ -88,6 +94,17 @@ class CalcModel {
             
         }
         self.text.append(" = \(operationsToReduce.first!)")
-        
     }
+    
+    func clearAll() {
+        self.text = ""
+    }
+    
+    func clearLast() {
+        if !text.isEmpty {
+            self.text.removeLast()
+        }
+    }
+    
+    
 }
